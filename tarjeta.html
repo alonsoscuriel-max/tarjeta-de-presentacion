@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alonso Curiel — Laboratorio Artesano</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Raleway:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --forest: #1C3235;
+      --forest2: #25424A;
+      --forest3: #142628;
+      --gold: #C4975A;
+      --gold-lt: #D9B07A;
+      --cream: #F6F2EA;
+      --ink: #1C1C1A;
+      --muted: #7A7970;
+    }
+
+    /* ══════════════════════════════════════════
+       PAGE BACKGROUND
+    ══════════════════════════════════════════ */
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Raleway', sans-serif;
+      padding: 48px 16px;
+      background: var(--forest3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background decorative circles */
+    .bg-shapes {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(196, 151, 90, .12);
+    }
+
+    .bg-circle.filled {
+      border: none;
+      background: rgba(37, 66, 74, .45);
+    }
+
+    .bg-c1 {
+      width: 520px;
+      height: 520px;
+      top: -180px;
+      left: -180px;
+    }
+
+    .bg-c2 {
+      width: 320px;
+      height: 320px;
+      top: -80px;
+      left: -80px;
+      border-width: 2px;
+      border-color: rgba(196, 151, 90, .08);
+    }
+
+    .bg-c3 {
+      width: 600px;
+      height: 600px;
+      bottom: -220px;
+      right: -200px;
+    }
+
+    .bg-c4 {
+      width: 260px;
+      height: 260px;
+      bottom: -60px;
+      right: -60px;
+      border-width: 2px;
+      border-color: rgba(196, 151, 90, .08);
+    }
+
+    .bg-c5 {
+      width: 80px;
+      height: 80px;
+      top: 38%;
+      left: 8%;
+      border-color: rgba(196, 151, 90, .1);
+    }
+
+    .bg-c6 {
+      width: 40px;
+      height: 40px;
+      top: 42%;
+      left: 12%;
+      border-color: rgba(196, 151, 90, .07);
+    }
+
+    .bg-c7 {
+      width: 180px;
+      height: 180px;
+      top: 12%;
+      right: 10%;
+      filled;
+      background: rgba(37, 66, 74, .3);
+      border: none;
+    }
+
+    .bg-dot {
+      width: 6px;
+      height: 6px;
+      background: rgba(196, 151, 90, .25);
+      border: none;
+      top: 30%;
+      right: 20%;
+    }
+
+    .bg-dot2 {
+      width: 6px;
+      height: 6px;
+      background: rgba(196, 151, 90, .15);
+      border: none;
+      bottom: 28%;
+      left: 18%;
+    }
+
+    /* ══════════════════════════════════════════
+       CARD WRAPPER — shimmer lives here
+    ══════════════════════════════════════════ */
+    .card-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 26px;
+    }
+
+    /* Gold border glow */
+    .card-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 27px;
+      background: linear-gradient(135deg,
+          rgba(196, 151, 90, .6) 0%,
+          rgba(196, 151, 90, .05) 40%,
+          rgba(196, 151, 90, .05) 60%,
+          rgba(196, 151, 90, .4) 100%);
+      z-index: -1;
+      animation: borderPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes borderPulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .4;
+      }
+    }
+
+    /* Shimmer sweep */
+    .card-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      background: linear-gradient(115deg,
+          transparent 30%,
+          rgba(255, 255, 255, .08) 48%,
+          rgba(255, 255, 255, .13) 50%,
+          rgba(255, 255, 255, .08) 52%,
+          transparent 70%);
+      background-size: 300% 100%;
+      background-position: 200% 0;
+      animation: shimmer 5s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      50% {
+        background-position: -100% 0;
+        opacity: 1;
+      }
+
+      60%,
+      100% {
+        background-position: -100% 0;
+        opacity: 0;
+      }
+    }
+
+    /* ══════════════════════════════════════════
+       CARD
+    ══════════════════════════════════════════ */
+    .card {
+      width: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(196, 151, 90, .08),
+        0 8px 24px rgba(0, 0, 0, .35),
+        0 32px 80px rgba(0, 0, 0, .3);
+    }
+
+    /* ── Top panel ──────────────────────────────── */
+    .top {
+      background: var(--forest);
+      padding: 44px 40px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .top::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 40px solid var(--forest2);
+      opacity: .7;
+    }
+
+    .top::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -40px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 32px solid var(--forest2);
+      opacity: .5;
+    }
+
+    /* Extra small circle top-left */
+    .top-circle-extra {
+      position: absolute;
+      top: 30px;
+      left: -20px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 14px solid var(--forest2);
+      opacity: .4;
+    }
+
+    .top-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .company-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .company-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: dotPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(196, 151, 90, .5);
+      }
+
+      50% {
+        box-shadow: 0 0 0 5px rgba(196, 151, 90, 0);
+      }
+    }
+
+    .company-name {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 46px;
+      font-weight: 300;
+      color: #F6F2EA;
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+    }
+
+    .name em {
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+
+    .gold-rule {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt), var(--gold));
+      background-size: 200% 100%;
+      border-radius: 2px;
+      margin: 20px 0 16px;
+      animation: ruleShine 4s ease-in-out infinite;
+    }
+
+    @keyframes ruleShine {
+
+      0%,
+      100% {
+        background-position: 0% 0;
+      }
+
+      50% {
+        background-position: 100% 0;
+      }
+    }
+
+    .job-title {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(246, 242, 234, .55);
+    }
+
+    /* ── Bottom panel ───────────────────────────── */
+    .bottom {
+      background: #ffffff;
+      padding: 36px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .c-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--cream);
+      border: 1px solid #EDEAE3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .2s, border-color .2s;
+    }
+
+    .contact-row:hover .c-icon {
+      background: var(--forest);
+      border-color: var(--forest);
+    }
+
+    .contact-row:hover .c-icon svg {
+      stroke: #fff;
+    }
+
+    .c-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--forest);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke .2s;
+    }
+
+    .c-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .c-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .c-value {
+      font-size: 13.5px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .sep {
+      height: 1px;
+      background: #EDEAE3;
+    }
+
+    /* Social */
+    .social-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 50px;
+      background: var(--forest);
+      text-decoration: none;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: background .2s, transform .15s, box-shadow .2s;
+    }
+
+    .social-btn:hover {
+      background: var(--forest2);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(28, 50, 53, .25);
+    }
+
+    .social-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* Footer */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-brand {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .footer-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Page background shapes ── -->
+  <div class="bg-shapes" aria-hidden="true">
+    <div class="bg-circle bg-c1"></div>
+    <div class="bg-circle bg-c2"></div>
+    <div class="bg-circle bg-c3"></div>
+    <div class="bg-circle bg-c4"></div>
+    <div class="bg-circle bg-c5"></div>
+    <div class="bg-circle bg-c6"></div>
+    <div class="bg-circle filled bg-c7"></div>
+    <div class="bg-circle filled bg-dot"></div>
+    <div class="bg-circle filled bg-dot2"></div>
+  </div>
+
+  <!-- ── Card ── -->
+  <div class="card-wrap">
+    <div class="card">
+
+      <!-- Top dark panel -->
+      <div class="top">
+        <div class="top-circle-extra"></div>
+        <div class="top-inner">
+
+          <div class="company-tag">
+            <div class="company-dot"></div>
+            <span class="company-name">Laboratorio Artesano</span>
+          </div>
+
+          <h1 class="name">Alonso<br><em>Curiel</em></h1>
+
+          <div class="gold-rule"></div>
+          <p class="job-title">Director Comercial</p>
+
+        </div>
+      </div>
+
+      <!-- Bottom white panel -->
+      <div class="bottom">
+
+        <div class="contact-list">
+          <a class="contact-row" href="mailto:laboratorioartesano@outlook.com">
+            <div class="c-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="4" width="20" height="16" rx="3" />
+                <polyline points="2,4 12,13 22,4" />
+              </svg>
+            </div>
+            <div class="c-text">
+              <span class="c-label">Correo</span>
+              <span class="c-value">laboratorioartesano@outlook.com</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="social-row">
+          <a class="social-btn" href="https://www.instagram.com/laboratorioartesano" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.31.975.975 1.247 2.242 1.31 3.608.058 1.266.069 1.646.069 4.849s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.31 3.608-.975.975-2.242 1.247-3.608 1.31-1.266.058-1.646.069-4.849.069s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.31-.975-.975-1.247-2.242-1.31-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.31-3.608.975-.975 2.242-1.247 3.608-1.31C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+            </svg>
+            @laboratorioartesano
+          </a>
+        </div>
+
+        <div class="card-footer">
+          <span class="footer-brand">Laboratorio Artesano</span>
+          <div class="footer-dot"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
